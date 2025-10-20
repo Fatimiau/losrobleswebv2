@@ -1,63 +1,85 @@
-Residencial Los Robles - Plataforma de Gestión Comunitaria
+Residencial Los Robles - Plataforma de Gestión Comunitaria 🏡
 
-Este repositorio contiene el código fuente de la plataforma de gestión para Residencial Los Robles, un proyecto desarrollado como parte del curso Proyecto II. La aplicación está construida con tecnologías web modernas y sigue la metodología ágil Scrum para su desarrollo.
+Este es un prototipo funcional completo de una plataforma de gestión comunitaria (SPA - Single Page Application) desarrollada como parte del curso Proyecto II de la Licenciatura en Desarrollo de Sistemas Web.
 
+La aplicación simula un entorno multiusuario real, distinguiendo entre roles de Administrador (Mesa Directiva) y Residente. La persistencia de los datos se gestiona a través del localStorage del navegador para simular una base de datos, y el estado global de la aplicación se maneja de forma centralizada con React Context.
 
-🚀 Sprint 1 Completado
+✨ Características Principales
 
-El estado actual del proyecto refleja la finalización del Sprint 1, el cual estableció las bases funcionales de la plataforma. Las funcionalidades implementadas incluyen:
+Para Administradores (Mesa Directiva)
 
-    #001 - Gestión de Usuarios: Sistema de Registro e Inicio de Sesión para residentes.
+    Gestión de Usuarios: Ver la lista de todos los residentes, editar su información (nombre, email, casa) y eliminar sus cuentas.
 
-    #002 - Gestión de Incidencias: Formulario para registrar incidencias (fugas, fallas, etc.) y un tablero para visualizarlas y cambiar su estado. Los datos se persisten localmente usando localStorage.
+    Gestión de Pagos: Crear nuevas cuotas de mantenimiento mensuales y asignarlas a una casa específica.
 
-    #003 - Reportes para Mesa Directiva: Una sección dedicada que muestra un resumen de todas las incidencias registradas, permitiendo un seguimiento claro.
+    Gestión de Incidencias: Visualizar todas las incidencias reportadas por los residentes y cambiar su estado (Nueva, En progreso, Cerrada).
 
-    Flujo de Autenticación: La aplicación protege las rutas, mostrando únicamente la página de login/registro a los usuarios no autenticados.
+    Comunicación: Publicar avisos importantes para toda la comunidad.
 
-🛠️ Tecnologías Utilizadas
+    Democracia: Crear nuevas votaciones con múltiples opciones para que los residentes participen.
 
-    Vite: Herramienta de frontend de última generación para un desarrollo rápido y eficiente.
+Para Residentes
 
-    React.js: Librería principal para la construcción de la interfaz de usuario.
+    Autenticación Segura: Sistema de registro y login. Los nuevos usuarios deben proporcionar su número de casa.
 
-    React Router Dom: Para la gestión de rutas y navegación entre las diferentes páginas de la aplicación.
+    Perfil Personal: Ver y actualizar su propia información de perfil (nombre, email, contraseña).
 
-    CSS Moderno: Estilos personalizados con un diseño oscuro y profesional, utilizando variables de CSS para un fácil mantenimiento.
+    Estado de Cuenta Personalizado: Visualizar únicamente el historial de pagos y las cuotas pendientes de su propia casa, con la opción de "pagar" las cuotas pendientes.
 
-⚙️ Instalación y Ejecución Local
+    Reporte de Incidencias: Crear nuevos reportes de incidencias, detallando el problema y su categoría.
 
-Para ejecutar este proyecto en tu máquina local, sigue estos sencillos pasos:
+    Interacción Comunitaria: Participar en las votaciones activas (el sistema evita votos duplicados) y ver los resultados después de votar.
+
+    Comunicación: Añadir comentarios en los reportes de incidencias para comunicarse con la mesa directiva.
+
+🚀 Tecnologías Utilizadas
+
+    React 18 (con Vite)
+
+    React Router Dom para el enrutamiento del lado del cliente.
+
+    React Context para la gestión del estado global.
+
+    date-fns para el formateo de fechas amigables.
+
+    CSS Moderno con variables para un diseño consistente y responsivo.
+
+🔧 Instalación y Puesta en Marcha
+
+Para ejecutar este proyecto en tu máquina local, sigue estos pasos:
 
     Clona el repositorio:
+    Bash
 
-    git clone [https://github.com/Fatimiau/losrobleswebv2.git](https://github.com/Fatimiau/losrobleswebv2.git)
+git clone https://github.com/tu-usuario/tu-repositorio.git
 
-    Navega a la carpeta del proyecto:
+Navega a la carpeta del proyecto:
+Bash
 
-    cd residencial-los-robles-v2
+cd tu-repositorio
 
-    Instala las dependencias:
+Instala las dependencias: Este comando descargará todas las librerías necesarias para que el proyecto funcione.
+Bash
 
-    npm install
+npm install
 
-    Inicia el servidor de desarrollo:
+Inicia el servidor de desarrollo: Esto levantará un servidor local (generalmente en http://localhost:5173) y abrirá la aplicación en tu navegador.
+Bash
 
     npm run dev
 
-    Abre tu navegador y visita http://localhost:5173.
+🔑 Uso y Credenciales de Prueba
 
-📂 Estructura del Proyecto
-El código fuente está organizado de la siguiente manera para facilitar su mantenimiento:
+La aplicación cuenta con dos roles predefinidos para la demostración. También puedes registrar nuevos usuarios residentes desde la pantalla de login.
 
-src/
-├── App.jsx            # Componente principal y gestión de rutas
-├── index.css          # Estilos globales
-├── main.jsx           # Punto de entrada de la aplicación
-└── pages/             # Carpeta para los componentes de cada página
-    ├── Home.jsx
-    ├── Incidencias.jsx
-    ├── Login.jsx
-    └── Reportes.jsx
+    Cuenta de Administrador (Mesa Directiva):
 
-Proyecto desarrollado por Fatima Bautista Cruz.
+        Email: admin@robles.com
+
+        Contraseña: admin123
+
+    Cuenta de Residente (Ejemplo):
+
+        Email: residente@test.com
+
+        Contraseña: res123
