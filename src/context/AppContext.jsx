@@ -22,9 +22,7 @@ const initialDb = {
   votaciones: [
     { id: "v1", pregunta: "¿Nuevo color para la fachada?", opciones: [{id: "o1", texto: "Azul Pacífico"}, {id: "o2", texto: "Verde Olivo"}], activa: true }
   ],
-  votos: [
-    // { votacionId: "v1", userId: "u2", optionId: "o1" } // Example of a vote
-  ]
+  votos: []
 };
 
 const STORAGE_KEY = "DB_ROBLES";
@@ -35,7 +33,9 @@ export function AppProvider({ children }) {
   const [db, setDb] = useState(() => {
     try {
       const storedDb = localStorage.getItem(STORAGE_KEY);
-      return storedDb ? JSON.parse(storedDb) : initialDb;
+      // Merge initialDb con storedDb para asegurar que todas las claves existan
+      const loadedDb = storedDb ? JSON.parse(storedDb) : {};
+      return { ...initialDb, ...loadedDb };
     } catch { return initialDb; }
   });
 
@@ -44,39 +44,44 @@ export function AppProvider({ children }) {
   }, [db]);
 
   const login = (email, password) => {
-    const foundUser = db.users.find((user) => user.email === email && user.password === password);
+    const foundUser = (db.users || []).find((user) => user.email === email && user.password === password);
     if (foundUser) {
       setCurrentUser(foundUser);
       return true;
     }
     return false;
   };
+
   const logout = () => setCurrentUser(null);
+  
   const register = (userData) => {
     const newUser = { ...userData, id: crypto.randomUUID(), role: 'residente' };
-    setDb(prev => ({ ...prev, users: [...prev.users, newUser] }));
+    setDb(prev => ({ ...prev, users: [newUser, ...(prev.users || [])] }));
   };
+
   const updateUser = (userId, updatedData) => {
-    setDb(prev => ({ ...prev, users: prev.users.map(u => u.id === userId ? { ...u, ...updatedData } : u) }));
+    setDb(prev => ({ ...prev, users: (prev.users || []).map(u => u.id === userId ? { ...u, ...updatedData } : u) }));
     if (currentUser?.id === userId) {
       setCurrentUser(prev => ({ ...prev, ...updatedData }));
     }
     alert("¡Datos actualizados con éxito!");
   };
+
   const deleteUser = (userId) => {
     if (userId === currentUser?.id) return alert("No puedes eliminar tu propia cuenta.");
-    setDb(prev => ({ ...prev, users: prev.users.filter(u => u.id !== userId) }));
+    setDb(prev => ({ ...prev, users: (prev.users || []).filter(u => u.id !== userId) }));
     alert("Usuario eliminado exitosamente.");
   };
 
-  // --- NEW BUSINESS LOGIC FUNCTIONS ---
   const createPago = (pagoData) => {
     const nuevoPago = { ...pagoData, id: crypto.randomUUID(), monto: 500, estado: "Pendiente" };
-    setDb(prev => ({ ...prev, pagos: [nuevoPago, ...prev.pagos] }));
+    setDb(prev => ({ ...prev, pagos: [nuevoPago, ...(prev.pagos || [])] }));
   };
+
   const payPago = (pagoId) => {
-    setDb(prev => ({ ...prev, pagos: prev.pagos.map(p => p.id === pagoId ? { ...p, estado: "Pagado" } : p) }));
+    setDb(prev => ({ ...prev, pagos: (prev.pagos || []).map(p => p.id === pagoId ? { ...p, estado: "Pagado" } : p) }));
   };
+
   const createVotacion = (votacionData) => {
     const nuevaVotacion = {
       ...votacionData,
@@ -84,11 +89,15 @@ export function AppProvider({ children }) {
       activa: true,
       opciones: votacionData.opciones.map(o => ({...o, id: crypto.randomUUID()}))
     };
-    setDb(prev => ({ ...prev, votaciones: [nuevaVotacion, ...prev.votaciones] }));
+    // --- AQUÍ ESTÁ LA CORRECCIÓN ---
+    // Usamos (prev.votaciones || []) para asegurarnos de que siempre sea un array
+    setDb(prev => ({ ...prev, votaciones: [nuevaVotacion, ...(prev.votaciones || [])] }));
   };
+
   const castVote = (votacionId, optionId) => {
     const nuevoVoto = { votacionId, optionId, userId: currentUser.id };
-    setDb(prev => ({ ...prev, votos: [...prev.votos, nuevoVoto] }));
+    // --- AQUÍ ESTÁ LA CORRECCIÓN ---
+    setDb(prev => ({ ...prev, votos: [...(prev.votos || []), nuevoVoto] }));
   };
 
   const value = { currentUser, db, setDb, login, logout, register, updateUser, deleteUser, createPago, payPago, createVotacion, castVote };
@@ -99,7 +108,7 @@ export function AppProvider({ children }) {
 export function useApp() {
   const context = useContext(AppContext);
   if (context === undefined) {
-    throw new Error("useApp must be used within an AppProvider");
+    throw new Error("useApp debe ser usado dentro de un AppProvider");
   }
   return context;
 }
