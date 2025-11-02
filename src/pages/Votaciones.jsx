@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 import { useApp } from "../context/AppContext";
+// Importamos toast para notificaciones
+import { toast } from "react-hot-toast";
 
 export default function Votaciones() {
   const { currentUser, db, createVotacion, castVote } = useApp();
@@ -23,13 +25,13 @@ export default function Votaciones() {
     const pregunta = formData.get("pregunta").trim();
     const opcionesFiltradas = opciones.map(o => o.trim()).filter(Boolean);
     if (!pregunta || opcionesFiltradas.length < 2) {
-      alert("La pregunta y al menos dos opciones son obligatorias.");
+      toast.error("La pregunta y al menos dos opciones son obligatorias.");
       return;
     }
     createVotacion({ pregunta, opciones: opcionesFiltradas.map(texto => ({texto})) });
     e.target.reset();
     setOpciones(["", ""]);
-    alert("Votación creada con éxito.");
+    toast.success("Votación creada con éxito.");
   };
 
   const getResultados = (votacionId) => {
@@ -40,10 +42,14 @@ export default function Votaciones() {
     return resultados;
   };
 
-  // --- CRITICAL FIX IS HERE ---
-  // We use `(db.votaciones || [])` to ensure we always have an array to filter,
-  // even if the key doesn't exist in localStorage.
   const votacionesActivas = (db.votaciones || []).filter(v => v.activa);
+
+  // --- NUEVA FUNCIÓN PARA MANEJAR EL VOTO ---
+  const handleVoteClick = (votacionId, optionId) => {
+    // Llamamos a la función castVote con los TRES argumentos requeridos
+    castVote(votacionId, optionId, currentUser.id);
+    toast.success("¡Gracias por tu voto!");
+  };
 
   return (
     <div className={`grid ${isAdmin ? 'grid-2' : ''}`}>
@@ -82,7 +88,9 @@ export default function Votaciones() {
                 ) : (
                   <div style={{display: 'flex', gap: 8, marginTop: 12}}>
                     {votacion.opciones.map(op => (
-                      <button key={op.id} className="btn" onClick={() => castVote(votacion.id, op.id)}>
+                      // --- AQUÍ ESTÁ LA CORRECCIÓN ---
+                      // Llamamos a la nueva función handleVoteClick
+                      <button key={op.id} className="btn" onClick={() => handleVoteClick(votacion.id, op.id)}>
                         {op.texto}
                       </button>
                     ))}

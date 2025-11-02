@@ -63,10 +63,9 @@ export default function Login() {
               </>
             )}
 
-            {modo === "login" && (<h2 className="section" style={{ textAlign: "center" }}>Iniciar Sesión</h2>)}
-
             {modo === "login" && (
               <>
+                <h2 className="section" style={{ textAlign: "center" }}>Iniciar Sesión</h2>
                 <input className="input" type="email" name="email" placeholder="correo@ejemplo.com" required />
                 <input className="input" type="password" name="password" placeholder="Contraseña" required />
               </>
