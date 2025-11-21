@@ -1,8 +1,6 @@
 import { useApp } from "../context/AppContext";
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { formatDistanceToNow } from 'date-fns';
-import { es } from 'date-fns/locale';
 
 // --- Panel de Estadísticas para Administradores ---
 function AdminDashboard() {
@@ -80,7 +78,8 @@ function ResidenteDashboard() {
       {myStats.misPagosVencidos > 0 && (
         <div className="card-alerta vencido">
           <p>⚠️ Tienes **{myStats.misPagosVencidos}** pago(s) de mantenimiento vencido(s).</p>
-          <Link to="/pagos" className="btn" style={{background: 'var(--danger)', boxShadow: 'none'}}>Pagar Ahora</Link>
+          {/* --- CAMBIO MOD-02: Botón Verde (var--ok) --- */}
+          <Link to="/pagos" className="btn" style={{background: 'var(--ok)', boxShadow: 'none'}}>Pagar Ahora</Link>
         </div>
       )}
 
@@ -126,11 +125,8 @@ function StatCard({ valor, titulo, link, color = 'ok' }) {
   );
 }
 
-
 // --- Componente Principal ---
 export default function Home() {
   const { currentUser } = useApp();
-  
-  // Renderiza un dashboard u otro basado en el rol
   return currentUser.role === 'admin' ? <AdminDashboard /> : <ResidenteDashboard />;
 }

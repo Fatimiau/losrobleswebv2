@@ -14,7 +14,6 @@ import MiCuenta from "./pages/MiCuenta";
 import AdminUsuarios from "./pages/AdminUsuarios";
 import AdminEditarUsuario from "./pages/AdminEditarUsuario";
 import NotificacionesMenu from "./components/NotificacionesMenu";
-// --- NUEVAS IMPORTACIONES ---
 import Documentos from "./pages/Documentos";
 import AdminDocumentos from "./pages/AdminDocumentos";
 
@@ -27,7 +26,7 @@ function AdminRoute({ children }) {
   return children;
 }
 
-// Estilos para el contador (los ponemos aquí para no tener que pedir index.css)
+// Estilos para el contador
 const badgeNotificacionStyles = {
   position: 'absolute',
   top: '-5px',
@@ -69,14 +68,10 @@ export default function App() {
 
   return (
     <div className="container">
-<header className="header">
-        {/* 1. NUEVO DIV CONTENEDOR
-          Este div usará flexbox para poner el título a la izquierda
-          y los botones a la derecha.
-        */}
+      <header className="header">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           
-          {/* Bloque de Título (sin cambios) */}
+          {/* Bloque de Título */}
           <div>
             <h1>Residencial Los Robles</h1>
             <p>
@@ -85,10 +80,7 @@ export default function App() {
             </p>
           </div>
 
-          {/* 2. BOTONES MOVIDOS AQUÍ
-            Este es el div que ANTES estaba dentro del <nav>.
-            Nota que quitamos el 'marginLeft: "auto"' 
-          */}
+          {/* Bloque de Botones */}
           <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
             <div style={{ position: 'relative' }}>
               <button className="btn-icon" onClick={handleBellClick} style={{ fontSize: 24, width: 44, height: 44, background: 'transparent', boxShadow: 'none' }}>
@@ -105,14 +97,7 @@ export default function App() {
           </div>
           
         </div>
-        {/* Fin del nuevo div contenedor */}
 
-
-        {/* 3. BARRA DE NAVEGACIÓN
-          La barra de navegación ahora SÓLO contiene los enlaces de las páginas.
-          El CSS original en index.css ('margin: 16px 0 0 0') le dará 
-          automáticamente el espacio de separación hacia abajo.
-        */}
         <nav className="nav">
           <NavLink to="/" className={({isActive})=> isActive ? "active" : undefined} end>Inicio</NavLink>
           <NavLink to="/incidencias" className={({isActive})=> isActive ? "active" : undefined}>Incidencias</NavLink>
@@ -129,8 +114,6 @@ export default function App() {
               <NavLink to="/admin/documentos" className={({isActive})=> isActive ? "active" : undefined}>Gestión Docs</NavLink>
             </>
           )}
-
-          {/* El div de botones que estaba aquí ahora está arriba */}
         </nav>
       </header>
 
@@ -143,11 +126,9 @@ export default function App() {
           <Route path="/votaciones" element={<Votaciones />} />
           <Route path="/mi-cuenta" element={<MiCuenta />} />
           
-          {/* --- NUEVAS RUTAS --- */}
           <Route path="/documentos" element={<Documentos />} />
           <Route path="/admin/documentos" element={<AdminRoute><AdminDocumentos /></AdminRoute>} />
           
-          {/* --- RUTAS DE ADMIN EXISTENTES --- */}
           <Route path="/reportes" element={<AdminRoute><Reportes /></AdminRoute>} />
           <Route path="/admin/usuarios" element={<AdminRoute><AdminUsuarios /></AdminRoute>} />
           <Route path="/admin/usuarios/:userId/editar" element={<AdminRoute><AdminEditarUsuario /></AdminRoute>} />
@@ -156,8 +137,9 @@ export default function App() {
         </Routes>
       </main>
 
+      {/* --- CAMBIO MOD-03: Footer Actualizado --- */}
       <footer style={{ marginTop: 24, color: "var(--muted)", fontSize: 13 }}>
-        © 2025 Residencial Los Robles · Sprint 2 Terminado
+        © 2025 Residencial Los Robles · Versión vPRO1.0
       </footer>
     </div>
   );
